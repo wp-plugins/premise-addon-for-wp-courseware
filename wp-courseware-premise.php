@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: WP Courseware - Premise Membership Add On
- * Version: 1.1
+ * Version: 1.2
  * Plugin URI: http://flyplugins.com
  * Description: The official extension for WP Courseware to add support for the Premise Membership membership plugin for WordPress.
  * Author: Fly Plugins
