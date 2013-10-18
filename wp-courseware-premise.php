@@ -112,12 +112,11 @@ class WPCW_Premise extends WPCW_Members
 	/**
 	 * Function called to attach hooks for handling when a user is updated or created.
 	 */	
-	
 	protected function attach_updateUserCourseAccess()
 	{
 		// Events called whenever the user products are changed, which updates the user access.
-		add_action('premise_checkout_complete_after', 		array($this, 'handle_newUserCourseAccess'),10,3);
 		add_action('memberaccess_edit_order', 		array($this, 'handle_updateUserCourseAccess'),10,3);
+		add_action('premise_membership_create_order', array($this, 'handle_newUserCourseAccess'), 10, 3);
 
 
 	}
@@ -129,13 +128,12 @@ class WPCW_Premise extends WPCW_Members
 	 * @param Integer $user is the ID if the user being created.
 	 * @param Array $membership_level is level assigned to user.
 	 */
-	public function handle_newUserCourseAccess( $checkout_args, $product_id, $args)
+	public function handle_newUserCourseAccess($member_id, $order_details, $renewal)
 	{
 		// Get user ID from transaction
-		$user_info = wp_get_current_user();
-        $user = $user_info->ID;
+		$user = $member_id;
         //Returns product the user has purchased and is paid up on.
-		$membership_level = $product_id;
+		$membership_level = $order_details['_acp_order_product_id'];
 		// Over to the parent class to handle the sync of data.
 		parent::handle_courseSync($user, array($membership_level));
 	}

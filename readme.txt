@@ -4,7 +4,7 @@ Donate link: http://flyplugins.com/donate
 Tags: fly plugins,Premise for WordPress,wp courseware,wpcourseware,lms,lms for wordpress,learning management system,online ecourse,ecourse,flyplugins,wordpress learning management system
 Requires at least: 3.0
 Tested up to: 3.6.1
-Stable tag: 1.1
+Stable tag: 1.2
 
 This plugin adds integration between Premise and WP Courseware which allows you to assign course(s) to products for auto enrollment.
 
@@ -68,6 +68,9 @@ Click here to get [Premise for WordPress](http://flyplugins.com/premise-for-word
 2. This is the actual configuration screen where you can select courses that will be associated with a particular membership level
 
 == Changelog ==
+
+= 1.2 =
+* Fixed a bug that prevented automatic enrollment upon free and paid courses
 
 = 1.1 =
 * Fixed bug that prevented automatic enrollment
