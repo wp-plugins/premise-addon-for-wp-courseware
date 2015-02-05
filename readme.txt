@@ -63,7 +63,7 @@ Click here to get the [Best WordPress LMS Plugin](http://www.wpcourseware.com).
 
 = Where can I get Premise for WordPress? =
 
-Click here to get [Premise for WordPress](http://flyplugins.com/premise-for-wordpress).
+Premise is no longer sold.
 
 == Screenshots ==
 
