@@ -1,26 +1,11 @@
 <?php
 /*
  * Plugin Name: WP Courseware - Premise Membership Add On
- * Version: 1.2
+ * Version: 1.3
  * Plugin URI: http://flyplugins.com
  * Description: The official extension for WP Courseware to add support for the Premise Membership membership plugin for WordPress.
  * Author: Fly Plugins
  * Author URI: http://flyplugins.com
- */
-/*
- Copyright 2013 Fly Plugins
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
  */
 
 
@@ -29,7 +14,7 @@ include_once 'class_members.inc.php';
 
 
 // Hook to load the class
-add_action('init', 'WPCW_Premise_init',1);
+add_action('init', 'WPCW_Premise_init');
 
 /**
  * Initialise the membership plugin, only loaded if WP Courseware 
@@ -115,37 +100,97 @@ class WPCW_Premise extends WPCW_Members
 	protected function attach_updateUserCourseAccess()
 	{
 		// Events called whenever the user products are changed, which updates the user access.
-		add_action('memberaccess_edit_order', 		array($this, 'handle_updateUserCourseAccess'),10,3);
 		add_action('premise_membership_create_order', array($this, 'handle_newUserCourseAccess'), 10, 3);
-
+		add_action('admin_notices', array($this, 'handle_updateUserCourseAccess'), 10);
 
 	}
 
 	/**
-	 * Function just for handling the membership callback, to interpret the parameters
-	 * for the class to take over.
-	 * 
-	 * @param Integer $user is the ID if the user being created.
-	 * @param Array $membership_level is level assigned to user.
+	 * Assign selected courses to members of a paticular level.
+	 * @param Level ID in which members will get courses enrollment adjusted.
 	 */
-	public function handle_newUserCourseAccess($member_id, $order_details, $renewal)
+	protected function retroactive_assignment($level_ID)
+    {
+    	global $wpdb;
+
+    	$page = new PageBuilder(false);
+
+    	//$args for query
+		$args = array(
+		    'numberposts' => -1,
+		    'post_type' => 'acp-orders',
+		    'meta_query' => array(
+		        array(
+		            'key' => '_acp_order_product_id',
+		            'value' => $level_ID,
+		            'type' => 'NUMERIC',
+		            'compare' => '='
+		        )
+		    )
+		);
+
+		$order_posts = get_posts( $args );
+
+		if ($order_posts){
+
+			$user_orders = array();
+			//get order ID's
+			foreach ($order_posts as $key => $order_post){
+				$user_orders[$key] = $order_post->ID;
+			}
+
+			$users_with_products = array();
+			if ($user_orders){
+				//get user's ID based on order ID
+				foreach ($user_orders as $key => $user_order){
+					$get_userid = get_post_meta($user_order, '_acp_order_member_id',true);
+					$users_with_products[$key] = $get_userid;
+				}
+			}
+
+			foreach ($users_with_products as $user){
+				//enroll users
+				$this->wpcw_enroll_users($user);
+			}
+
+		}else {
+            $page->showMessage(__('No existing customers found for the specified product.', 'wp_courseware'));
+        }
+    }
+
+	/**
+	 * Functions just for handling the membership callback
+	 * 
+	 */
+	public function handle_newUserCourseAccess($member_id)
 	{
-		// Get user ID from transaction
 		$user = $member_id;
-        //Returns product the user has purchased and is paid up on.
-		$membership_level = $order_details['_acp_order_product_id'];
-		// Over to the parent class to handle the sync of data.
-		parent::handle_courseSync($user, array($membership_level));
+		$this->wpcw_enroll_users($user);
 	}
 
-	public function handle_updateUserCourseAccess( $post, $values, $old_values)
+	public function handle_updateUserCourseAccess()
 	{
-		// Get user ID from change in order status
-		$user = $old_values['_acp_order_member_id'] ;
-        //Returns product the user has changed to.
-		$membership_level = $values['_acp_order_product_id'];
-		// Over to the parent class to handle the sync of data.
-		parent::handle_courseSync($user, array($membership_level));
+
+
+		if ( empty( $post->post_name ) && isset( $_GET['member'] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce(  $_GET['_wpnonce'], 'comp-product-' .  $_GET['member'] ) ) {
+			$user = (int) $_GET['member'];
+		}else{
+			$user = accesspress_get_custom_field( '_acp_order_member_id' );
+		}
+
+		$this->wpcw_enroll_users($user);
+		
+	}
+
+	function wpcw_enroll_users($user){
+
+		$user_products = array();
+		$orders = (array) memberaccess_get_member_products( $user , 0 , true );
+		foreach ($orders as $key => $order){
+			$user_products[$key] = $order;
+		}
+
+		parent::handle_courseSync($user, $user_products);
 	}
 		
 	
