@@ -4,7 +4,7 @@ Donate link: http://flyplugins.com/donate
 Tags: fly plugins,Premise for WordPress,wp courseware,wpcourseware,lms,lms for wordpress,learning management system,online ecourse,ecourse,flyplugins,wordpress learning management system
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -72,6 +72,9 @@ Premise is no longer sold.
 2. This is the actual configuration screen where you can select courses that will be associated with a particular membership level
 
 == Changelog ==
+
+= 1.4 =
+* Fix: Fixed messaging for retroactive assignment function
 
 = 1.3 =
 * Fix: Fixed bug that prevented customer with multiple products from being enrolled into respective courses

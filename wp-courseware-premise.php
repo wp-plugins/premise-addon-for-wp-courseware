@@ -153,6 +153,10 @@ class WPCW_Premise extends WPCW_Members
 				$this->wpcw_enroll_users($user);
 			}
 
+		$page->showMessage(__('All members were successfully retroactively enrolled into the selected courses.', 'wp_courseware'));
+            
+        return;
+
 		}else {
             $page->showMessage(__('No existing customers found for the specified product.', 'wp_courseware'));
         }

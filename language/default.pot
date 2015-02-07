@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Courseware addon for Premise\n"
-"POT-Creation-Date: 2015-01-28 17:50-0700\n"
-"PO-Revision-Date: 2015-01-28 17:50-0700\n"
+"Project-Id-Version: Premise addon for WP Courseware\n"
+"POT-Creation-Date: 2015-02-06 17:18-0700\n"
+"PO-Revision-Date: 2015-02-06 17:18-0700\n"
 "Last-Translator: \n"
 "Language-Team: Fly Plugins\n"
 "Language: en_US\n"
@@ -54,7 +54,8 @@ msgstr ""
 
 #: class_members.inc.php:207
 #, php-format
-msgid "Want to return to the <a href=\"%s\">Course Access Settings summary</a>?"
+msgid ""
+"Want to return to the <a href=\"%s\">Course Access Settings summary</a>?"
 msgstr ""
 
 #: class_members.inc.php:223
@@ -115,6 +116,12 @@ msgstr ""
 msgid "product"
 msgstr ""
 
-#: wp-courseware-premise.php:159
+#: wp-courseware-premise.php:156
+msgid ""
+"All members were successfully retroactively enrolled into the selected "
+"courses."
+msgstr ""
+
+#: wp-courseware-premise.php:161
 msgid "No existing customers found for the specified product."
 msgstr ""
